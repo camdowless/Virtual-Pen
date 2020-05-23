@@ -3,6 +3,7 @@
 * Run `virtual_pen.py`
 * Works best with Red, Green, and Blue Expo markers
 * To clear the screen, put any colored marker up to the webcam
+* Results will differ depending on the lighting
 
 
 
