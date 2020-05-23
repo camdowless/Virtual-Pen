@@ -68,16 +68,21 @@ def main():
 
         # Only proceed if at least one contour is found
         if len(cnts) > 0:
-
             # Find the largest contour in the mask,
             # then use it to compute the minimum enclosing circle and centroid
             c = max(cnts, key=cv2.contourArea)
-            x2, y2, w, h = cv2.boundingRect(c)
+            ((x, y), radius) = cv2.minEnclosingCircle(c)
             area = cv2.contourArea(c)
+            M = cv2.moments(c)
+            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+            x2, y2 = center
+
             if area < 2000:
+                thickness = 0
+            elif area < 2500:
                 thickness = 4
             elif area < 3000:
-                thickness = 6;
+                thickness = 6
             elif area < 4000:
                 thickness = 8
             elif area < 6000:
@@ -100,13 +105,17 @@ def main():
 
             if x1 == 0 and y1 == 0:
                 x1, y1 = x2, y2
-            else:
+            elif thickness > 1:
                 canvas = cv2.line(canvas, (x1, y1), (x2, y2), draw_color, thickness)
             x1, y1, = x2, y2
 
+            # Puts circle at center of marker, the point where the drawing will be done
+            # cv2.circle(frame, center, 5, (0, 255, 255), -1)
+
+            # If the marker is close enough to the screen, it clears it
             if area > wiper_thresh:
                 cv2.putText(canvas, 'Clearing Canvas', (100, 200),
-                cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+                            cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 5, cv2.LINE_AA)
                 clear = True
         else:
             # If there were no contours detected, make x1, y1 = 0
@@ -130,6 +139,7 @@ def main():
             canvas = None
             clear = False
 
+    # When loop ends, exit program
     cap.release()
     cv2.destroyAllWindows()
 
