@@ -15,4 +15,4 @@
 
 
 
-![github-small](https://github.com/camdowless/Virtual-Pen/blob/master/demo_pic.jpg)
+![github-small](https://github.com/camdowless/Virtual-Pen/blob/master/me.jpg)
